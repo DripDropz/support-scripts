@@ -1,4 +1,4 @@
-# DripDropz SPO Rewards
+# DripDropz SPO Instant Rewards
 
 > Author: Adam Dean<br />
 > Version: RC 1.0<br />
@@ -16,6 +16,50 @@ stakepool delegates and issue rewards to them automatically based on the provide
 can bring your own rewards and pass in a file as an argument to [rewardStakers.sh](./rewardStakers.sh) if you'd
 like. Simply make sure that your JSON file matches the format found in [stakers.sample.json](./stakers.sample.json) to
 ensure smooth compatibility with these scripts.
+
+## Installation Instructions
+
+1. Sparse clone this repository
+```shell
+cd ~
+git init dripdropz
+cd dripdropz
+git remote add -f origin https://github.com/DripDropz/support-scripts/
+git config core.sparseCheckout true
+echo "packages/spo-rewards" >> .git/info/sparse-checkout
+git pull origin main
+ln -s packages/spo-rewards ./rewards
+cd rewards
+mkdir -p ./strategies ./snapshots ./rewards
+chmod +x setup.sh rewardStakers.sh manageStrategy.sh
+```
+2. Run [`setup.sh`](#setupsh) and follow the in-terminal prompts to configure default global variables
+```shell
+cd ~/dripdropz/rewards
+./setup.sh
+```
+3. Run [`manageStrategy.sh`](#managestrategysh) and follow the in-terminal prompts to configure your rewards strategy
+> Note: Browsing and updating existing strategies is not currently supported but will be Soon&trade;
+```shell
+cd ~/dripdropz/rewards
+./manageStrategy.sh
+```
+
+4. Run [`rewardStakers.sh`](#rewardstakerssh) and issue your rewards! When everything is configured correctly, the
+script will utilize the DripDropz Instant Rewardz API to fetch the latest epoch snapshot from your chosen stakepool and
+calculate rewards for all eligible delegators based on your strategy. By default, this script will perform a rewards
+"dry run" so that you can double-check and confirm rewards prior to issuing live rewards.
+```shell
+# Dry Run Rewards
+cd ~/dripdropz/rewards
+./rewardStakers.sh --strategy <your_strategy_name_here>
+```
+
+```shell
+# Issue Live Rewards
+cd ~/dripdropz/rewards
+./rewardStakers.sh --strategy <your_strategy_name_here> --dryrun 0
+```
 
 ## Scripts
 
